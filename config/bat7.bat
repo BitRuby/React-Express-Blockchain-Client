@@ -1,0 +1,11 @@
+SET DIFFICULTY=3
+SET REWARD=10
+SET PEERS=
+SET P2P_PORT=8986
+SET HTTP_PORT=5006
+cd ../Server 
+start npm run-script server
+SET PORT=6006
+SET REACT_APP_HTTP_PORT=5006
+cd ../Client
+start npm start

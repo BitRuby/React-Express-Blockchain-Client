@@ -106,8 +106,6 @@ class Server {
     }
     broadcastTx(transaction: Transaction): void {
         this.webSockets.forEach(webSocket => {
-            console.log("Send tx: " + webSocket.url)
-
             this.sendTransaction(webSocket, transaction);
         })
     }

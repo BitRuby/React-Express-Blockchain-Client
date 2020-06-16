@@ -64,10 +64,11 @@ app.get(GET_HISTORY, (request, response) => {
 });
 
 app.post(POST_MINE, (request, response) => {
+    const { online }: { online: string } = request.body;
     Blockchain.minePendingTransaction(blockchain.pendingTransactions, blockchain.chain, wallet.getPublicKey());
-    server.syncChains(blockchain.chain);
+    if (online === 'true') server.syncChains(blockchain.chain);
     blockchain.pendingTransactions = new Array<Transaction>();
-    server.broadcastClear();
+    if (online === 'true') server.broadcastClear();
     response.redirect(GET_CHAIN);
 });
 

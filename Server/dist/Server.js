@@ -158,7 +158,6 @@ var Server = /** @class */ (function () {
     Server.prototype.broadcastTx = function (transaction) {
         var _this = this;
         this.webSockets.forEach(function (webSocket) {
-            console.log("Send tx: " + webSocket.url);
             _this.sendTransaction(webSocket, transaction);
         });
     };

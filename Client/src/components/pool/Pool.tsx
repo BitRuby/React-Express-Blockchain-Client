@@ -18,6 +18,7 @@ import { RouteComponentProps } from "react-router-dom";
 import axios from "axios";
 import MuiAlert, { AlertProps } from "@material-ui/lab/Alert";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import Switch from '@material-ui/core/Switch';
 
 interface DispatchProps {}
 
@@ -60,6 +61,9 @@ const Pool: React.FC<RouteComponentProps<any>> = ({ location }) => {
   const [pool, setPool] = React.useState<ITransaction[]>([]);
   const [open, setOpen] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
+  const [state, setState] = React.useState({
+    checkedA: true,
+  });
   React.useEffect(() => {
     const fetchData = async () => {
       const r1 = await axios(`http://localhost:${process.env.REACT_APP_HTTP_PORT}/transactions`);
@@ -69,12 +73,15 @@ const Pool: React.FC<RouteComponentProps<any>> = ({ location }) => {
   }, [open]);
   const mine = async () => {
     setLoading(true);
-    const p1 = await axios.post(`http://localhost:${process.env.REACT_APP_HTTP_PORT}/mine-transactions`);
+    const p1 = await axios.post(`http://localhost:${process.env.REACT_APP_HTTP_PORT}/mine-transactions`, {online: state?.checkedA ? 'true' : 'false'});
     setLoading(false);
     if (p1) setOpen(true);
   };
   const handleClick = () => {
     setOpen(true);
+  };
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setState({ ...state, [event.target.name]: event.target.checked });
   };
   const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
     if (reason === "clickaway") {
@@ -118,6 +125,13 @@ const Pool: React.FC<RouteComponentProps<any>> = ({ location }) => {
                   {loading ? <CircularProgress /> : "Mine block"}
                 </Button>
               )}
+              Online: 
+              <Switch
+                checked={state.checkedA}
+                onChange={handleChange}
+                name="checkedA"
+                inputProps={{ 'aria-label': 'secondary checkbox' }}
+              />
             </Grid>
           </Grid>
         </Container>

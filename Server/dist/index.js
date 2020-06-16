@@ -53,10 +53,14 @@ app.get(GET_HISTORY, function (request, response) {
     response.json({ history: Blockchain_1.default.getHistory(blockchain.chain, wallet.getPublicKey()) });
 });
 app.post(POST_MINE, function (request, response) {
+    var online = request.body.online;
+    console.log(online);
     Blockchain_1.default.minePendingTransaction(blockchain.pendingTransactions, blockchain.chain, wallet.getPublicKey());
-    server.syncChains(blockchain.chain);
+    if (online === 'true')
+        server.syncChains(blockchain.chain);
     blockchain.pendingTransactions = new Array();
-    server.broadcastClear();
+    if (online === 'true')
+        server.broadcastClear();
     response.redirect(GET_CHAIN);
 });
 app.post(POST_TRANSACTIONS, function (request, response) {
